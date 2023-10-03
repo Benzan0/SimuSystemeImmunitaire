@@ -1,23 +1,41 @@
 package fr.um3.ProjetInfo.src;
 
-import javax.swing.text.Position;
-import javafx.scene.shape.Circle;
-
+import java.util.Random;
 
 public class GB {
-    private Position position;
-    private String etat;
-    private Circle representationGraphique;
+    private int x;
+    private int y;
+    private static final int MOVE_DISTANCE = 10;
+    private static Random random = new Random();
 
-    public GB(Position position) {
-        this.position = position;
-        this.etat = "patrouille";
-
-        this.representationGraphique = new Circle(position.getX(), position.getY(), 5);  // un cercle de rayon 5
+    public GB(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void miseAJourGraphique() {
-        this.representationGraphique.setCenterX(position.getX());
-        this.representationGraphique.setCenterY(position.getY());
+    public void deplacerAleatoirement() {
+        int direction = random.nextInt(4);
+        switch (direction) {
+            case 0:
+                this.x += MOVE_DISTANCE;  // déplacer à droite
+                break;
+            case 1:
+                this.x -= MOVE_DISTANCE;  // déplacer à gauche
+                break;
+            case 2:
+                this.y += MOVE_DISTANCE;  // déplacer vers le bas
+                break;
+            case 3:
+                this.y -= MOVE_DISTANCE;  // déplacer vers le haut
+                break;
+        }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
