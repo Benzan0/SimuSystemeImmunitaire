@@ -36,19 +36,30 @@ public class TestSwing {
     }
 
     private static void moveCircleRandomly(ActionEvent e) {
-        int direction = random.nextInt(4);
+        int direction = random.nextInt(3);
         switch (direction) {
             case 0:
+                int temp = random.nextInt(3);
                 circleX += 10;  // Move right
+                if(temp == 1)
+                    circleY += 10;
+                else if(temp == 2)
+                    circleY -=10;
                 break;
             case 1:
-                circleX -= 10;  // Move left
+                int temp2 = random.nextInt(3);
+                circleX -= 10;  // Move right
+                if(temp2 == 1)
+                    circleY += 10;
+                else if(temp2 == 2)
+                    circleY -=10;
                 break;
             case 2:
-                circleY += 10;  // Move down
-                break;
-            case 3:
-                circleY -= 10;  // Move up
+                int temp3 = random.nextInt(3);
+                if(temp3 == 1)
+                    circleY += 10;
+                else if(temp3 == 2)
+                    circleY -=10;
                 break;
         }
         panel.repaint();  // Request a repaint of the panel to show the new circle position
