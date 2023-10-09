@@ -1,26 +1,31 @@
 package fr.um3.ProjetInfo.src;
 
 public class CelluleMutante {
-    private Position position;
-    private String etat; // Vous devriez définir les états possibles pour la cellule mutante
+    private Position positionCelMut;
+    private final Etat etatCelMut;// Etat unique Errance
 
-    public void CelluleMutante(Position position) {
-        this.position = position;
-        // Initialisation d'un état par défaut
+    public CelluleMutante(Position position) {
+        setPosition(position);
+        etatCelMut = Etat.ERRANCE;
+
     }
 
-    public void seDeplacer() {
-        // implémentation du déplacement
+    public Position getPosition() {
+        return positionCelMut;
     }
 
-    // Autres méthodes pour la cellule mutante
-    public class Position {
-        private int x;
-        private int y;
+    public void setPosition(Position position) {
+        this.positionCelMut = position;
+    }
 
-        public Position(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
+    public Etat getEtatCelMut() {
+        return etatCelMut;
+    }
+
+    // Placement des toxines
+    public void placeToxine() {
+        //....
+
+
     }
 }
