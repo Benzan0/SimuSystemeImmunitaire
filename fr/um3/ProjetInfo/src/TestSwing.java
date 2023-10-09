@@ -65,3 +65,29 @@ public class TestSwing {
         panel.repaint();  // Request a repaint of the panel to show the new circle position
     }
 }
+/*
+        int direction = random.nextInt(3);  // Génère un nombre entre 0 (inclus) et 4 (exclus)
+        switch (direction) {
+            case 0:
+                this.x += 1;  // déplacer à droite
+                break;
+            case 1:
+                this.x -= 1;  // déplacer à gauche
+                break;
+            case 2:
+                this.x=0;
+                break;
+
+
+        }
+        int directiony = random.nextInt(3);
+        switch (directiony){
+            case 0:
+                this.y += 1;  // déplacer vers le haut
+                break;
+            case 1:
+                this.y -= 1;  // déplacer vers le bas
+                break;
+        }
+
+         */

@@ -1,11 +1,10 @@
 package fr.um3.ProjetInfo.src;
 
-import javax.swing.text.Position;
 import java.util.List;
 
 public class Plaie {
     private List<Bacterie> bacteries;
-    private List<GB> globulesBlancs;
+    private List<GlobuleBlanc> globulesBlancs;
     private List<CelluleMutante> cellulesMutantes;
     // ... autres attributs et méthodes pour la gestion de la plaie
 
