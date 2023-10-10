@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Generation {
 
 
-    public static final int distanceDetection = 200;
+    public static final int distanceDetection = 100;
     public final int deplacement = 10;
 
     static java.util.ArrayList<Bacterie> listBact = new java.util.ArrayList<>();
@@ -66,17 +66,17 @@ public class Generation {
 
 
     public void generation() {
-        System.out.println(getListBact().get(0).getPositionBact().getX()+" | "+getListBact().get(0).getPositionBact().getY());
-        System.out.println(getListBact().get(0).getEtatBact().toString());
+
         //position des bacterie
         for (int i = 0; i < getListBact().size(); i++) {
-            for(Bacterie bacterie : getListBact()){
-                if(isFuite(bacterie)){
+
+
+                if(isFuite(getListBact().get(i))){
                     getListBact().get(i).setEtatBact(Etat.FUITE);
                 }
                 else
                     getListBact().get(i).setEtatBact(Etat.RECHERCHE_NOURRITURE);
-            }
+
             System.out.println(isFuite(getListBact().get(i)));
 
 
@@ -129,10 +129,31 @@ public class Generation {
                             int dy = bacterie.getPositionBact().getY() - closestGlobuleBlanc.getPositionGlobBlanc().getY();
                             double magnitude = Math.sqrt(dx * dx + dy * dy);
 
-                            // Normaliser le vecteur de direction et le multiplier par le déplacement souhaité
-                            int newX = bacterie.getPositionBact().getX() + (int) (deplacement * dx / magnitude);
-                            int newY = bacterie.getPositionBact().getY() + (int) (deplacement * dy / magnitude);
+                            // Modifie X
+                            int newX = bacterie.getPositionBact().getX();
+                            if(dx > 0)
+                                newX += Position.deplacement;
+                            if (dx < 0)
+                                newX -= Position.deplacement;
 
+                            // Modifie Y
+                            int newY = bacterie.getPositionBact().getY();
+                            if(dy > 0)
+                                newY += Position.deplacement;
+                            if (dy < 0)
+                                newY -= Position.deplacement;
+
+                            if(dy==0){
+                                if(dx==0){
+                                    Position positionInitial = new Position(bacterie.getPositionBact().getX(),
+                                            bacterie.getPositionBact().getY());
+                                    GlobuleBlanc newGlobuleBlanc = new GlobuleBlanc(positionInitial, Etat.PATROUILLE);
+
+                                    getListBact().remove(i);
+
+
+                                }
+                            }
                             // Mettre à jour la position de la bactérie
                             bacterie.getPositionBact().setX(newX);
                             bacterie.getPositionBact().setY(newY);
@@ -142,6 +163,17 @@ public class Generation {
             }
 
             getListBact().get(i).setPositionBact(newPos);
+
+            System.out.println("************************* "+i+" *************************");
+            System.out.println(getListBact().get(i).getPositionBact().getX()+" | "+getListBact().get(0).getPositionBact().getY());
+            System.out.println(getListBact().get(i).getEtatBact().toString());
+        }
+        for(int i = 0; i<getListGlobblanc().size(); i++){
+            Position newPos = getListGlobblanc().get(i).getPositionGlobBlanc();
+
+            if (getListGlobblanc().get(i).getEtatGlobBlanc() == Etat.PATROUILLE) {
+                newPos.deplacerAleatoirement();
+            }
         }
     }
 
