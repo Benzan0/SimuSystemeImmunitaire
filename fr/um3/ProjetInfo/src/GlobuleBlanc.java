@@ -1,7 +1,5 @@
 package fr.um3.ProjetInfo.src;
 
-import java.util.Random;
-
 public class GlobuleBlanc {
 
     private static final int MOVE_DISTANCE = 10;
@@ -28,7 +26,7 @@ public class GlobuleBlanc {
     }
 
     public void setEtatGlobBlanc(Etat etatGlobBlanc) {
-        if(etatGlobBlanc == Etat.PATROUILLE || etatGlobBlanc == Etat.ATTAQUE)
+        if(etatGlobBlanc == Etat.PATROUILLE || etatGlobBlanc == Etat.CHASSE)
             this.etatGlobBlanc = etatGlobBlanc;
         else
             System.err.println("\n\n [Etat Non Disponnible Pour Le Globule Blanc]");

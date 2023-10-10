@@ -30,7 +30,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(false);
 
-        timer = new Timer(500, new ActionListener() {
+        timer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isRunning) { // only update if the simulation is running
@@ -65,7 +65,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
         }
 
         private void drawGlobuleBlanc(Graphics g, GlobuleBlanc gb) {
-            g.setColor(Color.GRAY);
+            g.setColor(Color.RED);
             Position pos = gb.getPositionGlobBlanc();
             g.fillRect(pos.getX(), pos.getY(), 20, 20);
         }
@@ -88,15 +88,17 @@ public class SimulationFrame extends JFrame implements KeyListener {
         SwingUtilities.invokeLater(() -> {
             Generation generation = new Generation();
 
-            for(int i=0; i<100; i++){
-                Position pos = new Position(600, 500);
+            for(int i=0; i<300; i++){
+                Position pos = new Position(300, 300);
                 Bacterie b = new Bacterie(pos, Etat.RECHERCHE_NOURRITURE);
                 generation.getListBact().add(b);
             }
 
-            Position posGB = new Position(500, 500);
+            Position posGB = new Position(600, 600);
             GlobuleBlanc gb = new GlobuleBlanc(posGB, Etat.PATROUILLE);
             generation.getListGlobblanc().add(gb);
+
+
 
             SimulationFrame frame = new SimulationFrame(generation);
             frame.setVisible(true);

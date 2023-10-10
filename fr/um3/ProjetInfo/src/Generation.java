@@ -6,6 +6,7 @@ public class Generation {
 
 
     public static final int distanceDetection = 100;
+    public static final int distanceDetectionGB = 100;
     public final int deplacement = 10;
 
     static java.util.ArrayList<Bacterie> listBact = new java.util.ArrayList<>();
@@ -48,6 +49,7 @@ public class Generation {
         return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
     }
 
+    // detecte si fuir
     public boolean isFuite(Bacterie bacterie) {
         for (GlobuleBlanc globuleBlanc : getListGlobblanc()) {
             double distance = calculateDistance(
@@ -64,6 +66,70 @@ public class Generation {
         return false;
     }
 
+    // detecte si prend en chasse
+    public boolean isEnChasse(GlobuleBlanc globuleBlanc) {
+        for (Bacterie bacterie : getListBact()) {
+            double distance = calculateDistance(
+                    globuleBlanc.getPositionGlobBlanc().getX(),
+                    bacterie.getPositionBact().getX(),
+                    globuleBlanc.getPositionGlobBlanc().getY(),
+                    bacterie.getPositionBact().getY()
+            );
+
+            // Check si la distance est inférieure ou égale à la distance de détection
+            // et si la bacterie est dans un état qui peut être chassé
+            if (distance <= distanceDetectionGB && bacterie.getEtatBact() != Etat.FUITE) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // trouve la bacterie la plus proche
+    private Bacterie findClosestBacterie(GlobuleBlanc globuleBlanc) {
+        double minDistance = Double.MAX_VALUE;
+        Bacterie closestBacterie = null;
+
+        for (Bacterie bacterie : getListBact()) {
+            double distance = calculateDistance(
+                    globuleBlanc.getPositionGlobBlanc().getX(), bacterie.getPositionBact().getX(),
+                    globuleBlanc.getPositionGlobBlanc().getY(), bacterie.getPositionBact().getY()
+            );
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestBacterie = bacterie;
+            }
+        }
+        return closestBacterie;
+    }
+
+
+    // se dirige vers la bactierie la plus proche
+    private void moveToBacterie(GlobuleBlanc globuleBlanc, Bacterie targetBacterie) {
+        // Calculer les différences de position en X et Y entre le globule blanc et la bactérie cible
+        int dx = targetBacterie.getPositionBact().getX() - globuleBlanc.getPositionGlobBlanc().getX();
+        int dy = targetBacterie.getPositionBact().getY() - globuleBlanc.getPositionGlobBlanc().getY();
+
+        // Modifie X
+        int newX = globuleBlanc.getPositionGlobBlanc().getX();
+        if (dx < 0)
+            newX -= Position.deplacementGB;
+        if (dx > 0)
+            newX += Position.deplacementGB;
+
+        // Modifie Y
+        int newY = globuleBlanc.getPositionGlobBlanc().getY();
+        if (dy < 0)
+            newY -= Position.deplacementGB;
+        if (dy > 0)
+            newY += Position.deplacementGB;
+
+        // Mettre à jour la position du globule blanc
+        globuleBlanc.getPositionGlobBlanc().setX(newX);
+        globuleBlanc.getPositionGlobBlanc().setY(newY);
+    }
+
 
     public void generation() {
 
@@ -71,11 +137,10 @@ public class Generation {
         for (int i = 0; i < getListBact().size(); i++) {
 
 
-                if(isFuite(getListBact().get(i))){
-                    getListBact().get(i).setEtatBact(Etat.FUITE);
-                }
-                else
-                    getListBact().get(i).setEtatBact(Etat.RECHERCHE_NOURRITURE);
+            if (isFuite(getListBact().get(i))) {
+                getListBact().get(i).setEtatBact(Etat.FUITE);
+            } else
+                getListBact().get(i).setEtatBact(Etat.RECHERCHE_NOURRITURE);
 
             System.out.println(isFuite(getListBact().get(i)));
 
@@ -102,80 +167,101 @@ public class Generation {
                     }
                 }
 
-                for (int i2 = 0; i < getListBact().size()-1; i++) {
-                    Bacterie bacterie = getListBact().get(i);
+                Bacterie bacterie = getListBact().get(i);
 
-                    // Si l'état de la bactérie est Fuite, s'éloigner du globule blanc le plus proche
-                    if (bacterie.getEtatBact() == Etat.FUITE) {
-                        // Trouver le globule blanc le plus proche
-                        double minDistance = Double.MAX_VALUE;
-                        GlobuleBlanc closestGlobuleBlanc = null;
+                // Si l'état de la bactérie est Fuite, s'éloigner du globule blanc le plus proche
+                if (bacterie.getEtatBact() == Etat.FUITE) {
+                    // Trouver le globule blanc le plus proche
+                    double minDistance = Double.MAX_VALUE;
+                    GlobuleBlanc closestGlobuleBlanc = null;
 
-                        for (GlobuleBlanc globuleBlanc : getListGlobblanc()) {
-                            double distance = calculateDistance(
-                                    globuleBlanc.getPositionGlobBlanc().getX(), bacterie.getPositionBact().getX(),
-                                    globuleBlanc.getPositionGlobBlanc().getY(), bacterie.getPositionBact().getY()
-                            );
+                    for (GlobuleBlanc globuleBlanc : getListGlobblanc()) {
+                        double distance = calculateDistance(
+                                globuleBlanc.getPositionGlobBlanc().getX(), bacterie.getPositionBact().getX(),
+                                globuleBlanc.getPositionGlobBlanc().getY(), bacterie.getPositionBact().getY()
+                        );
 
-                            if (distance < minDistance) {
-                                minDistance = distance;
-                                closestGlobuleBlanc = globuleBlanc;
-                            }
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestGlobuleBlanc = globuleBlanc;
                         }
+                    }
 
-                        // S'éloigner du globule blanc le plus proche
-                        if (closestGlobuleBlanc != null) {
-                            int dx = bacterie.getPositionBact().getX() - closestGlobuleBlanc.getPositionGlobBlanc().getX();
-                            int dy = bacterie.getPositionBact().getY() - closestGlobuleBlanc.getPositionGlobBlanc().getY();
-                            double magnitude = Math.sqrt(dx * dx + dy * dy);
+                    // S'éloigner du globule blanc le plus proche
+                    if (closestGlobuleBlanc != null) {
+                        int dx = bacterie.getPositionBact().getX() - closestGlobuleBlanc.getPositionGlobBlanc().getX();
+                        int dy = bacterie.getPositionBact().getY() - closestGlobuleBlanc.getPositionGlobBlanc().getY();
+                        double magnitude = Math.sqrt(dx * dx + dy * dy);
 
-                            // Modifie X
-                            int newX = bacterie.getPositionBact().getX();
-                            if(dx > 0)
-                                newX += Position.deplacement;
-                            if (dx < 0)
-                                newX -= Position.deplacement;
+                        // Modifie X
+                        int newX = bacterie.getPositionBact().getX();
+                        if (dx > 0)
+                            newX += Position.deplacement;
+                        if (dx < 0)
+                            newX -= Position.deplacement;
 
-                            // Modifie Y
-                            int newY = bacterie.getPositionBact().getY();
-                            if(dy > 0)
-                                newY += Position.deplacement;
-                            if (dy < 0)
-                                newY -= Position.deplacement;
-
-                            if(dy==0){
-                                if(dx==0){
-                                    Position positionInitial = new Position(bacterie.getPositionBact().getX(),
-                                            bacterie.getPositionBact().getY());
-                                    GlobuleBlanc newGlobuleBlanc = new GlobuleBlanc(positionInitial, Etat.PATROUILLE);
-
-                                    getListBact().remove(i);
-
-
-                                }
-                            }
-                            // Mettre à jour la position de la bactérie
-                            bacterie.getPositionBact().setX(newX);
-                            bacterie.getPositionBact().setY(newY);
-                        }
+                        // Modifie Y
+                        int newY = bacterie.getPositionBact().getY();
+                        if (dy > 0)
+                            newY += Position.deplacement;
+                        if (dy < 0)
+                            newY -= Position.deplacement;
+                        // Mettre à jour la position de la bactérie
+                        bacterie.getPositionBact().setX(newX);
+                        bacterie.getPositionBact().setY(newY);
                     }
                 }
             }
 
             getListBact().get(i).setPositionBact(newPos);
 
-            System.out.println("************************* "+i+" *************************");
-            System.out.println(getListBact().get(i).getPositionBact().getX()+" | "+getListBact().get(0).getPositionBact().getY());
+            System.out.println("************************* " + i + " *************************");
+            System.out.println(getListBact().get(i).getPositionBact().getX() + " | " + getListBact().get(0).getPositionBact().getY());
             System.out.println(getListBact().get(i).getEtatBact().toString());
         }
-        for(int i = 0; i<getListGlobblanc().size(); i++){
-            Position newPos = getListGlobblanc().get(i).getPositionGlobBlanc();
 
-            if (getListGlobblanc().get(i).getEtatGlobBlanc() == Etat.PATROUILLE) {
-                newPos.deplacerAleatoirement();
-            }
-        }
+    // -------------------------------------------GB-------------------------------------------------
+      for(int i =0 ; i<getListGlobblanc().size() ; i++) {
+          for (GlobuleBlanc globuleBlanc : getListGlobblanc()) {
+              Position newPos = globuleBlanc.getPositionGlobBlanc();
+
+              if (isEnChasse(globuleBlanc)) {
+                  globuleBlanc.setEtatGlobBlanc(Etat.CHASSE);
+              }
+              // Cette partie semble incorrecte, car elle modifie l'état des bactéries en se basant sur l'index du globule blanc. Vérifiez ceci.
+              else {
+                  getListGlobblanc().get(getListGlobblanc().indexOf(globuleBlanc)).setEtatGlobBlanc(Etat.PATROUILLE);
+              }
+
+              if (globuleBlanc.getEtatGlobBlanc() == Etat.PATROUILLE) {
+                  newPos.deplacerAleatoirement();
+              } else if (globuleBlanc.getEtatGlobBlanc() == Etat.CHASSE) {
+                  Bacterie closestBacterie = findClosestBacterie(globuleBlanc);
+                  if (closestBacterie != null) {
+                      moveToBacterie(globuleBlanc, closestBacterie);
+                  }
+              }
+              for (int i2 = 0; i2 < getListBact().size() - 1; i2++) {
+                  System.err.println("OK");
+                  if (getListGlobblanc().get(i).getPositionGlobBlanc().getX() ==
+                          getListBact().get(i2).getPositionBact().getX()){
+
+                      if (getListGlobblanc().get(i).getPositionGlobBlanc().getY() ==
+                              getListBact().get(i2).getPositionBact().getY()){
+
+
+                          ArrayList<Bacterie> newBact = getListBact();
+                          newBact.remove(i2);
+                          setListBact(newBact);
+
+                      }
+                  }
+              }
+
+          }
+      }
+
+
     }
-
 }
 

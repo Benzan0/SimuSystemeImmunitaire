@@ -5,6 +5,7 @@ import java.util.Random;
 public class Position {
 
     public static final int deplacement = 20;
+    public static final int deplacementGB = 40;
     private int x = 0;
     private int y = 0;
 
