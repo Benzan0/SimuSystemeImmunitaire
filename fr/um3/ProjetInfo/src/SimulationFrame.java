@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 public class SimulationFrame extends JFrame implements KeyListener {
     private Generation generation;
@@ -18,7 +19,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
         isRunning = true; // simulation starts in the running state
 
         this.setTitle("Simulation Cellulaire");
-        this.setSize(1920, 1080);
+        this.setSize(Position.width, Position.height);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
@@ -30,7 +31,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
         this.setFocusable(true);
         this.setFocusTraversalKeysEnabled(false);
 
-        timer = new Timer(50, new ActionListener() {
+        timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(isRunning) { // only update if the simulation is running
@@ -88,10 +89,14 @@ public class SimulationFrame extends JFrame implements KeyListener {
         SwingUtilities.invokeLater(() -> {
             Generation generation = new Generation();
 
-            for(int i=0; i<300; i++){
-                Position pos = new Position(300, 300);
+            int add = 0;
+
+            for(int i=0; i<2; i++){
+
+                Position pos = new Position(500, 500);
                 Bacterie b = new Bacterie(pos, Etat.RECHERCHE_NOURRITURE);
                 generation.getListBact().add(b);
+                add += 20  ;
             }
 
             Position posGB = new Position(600, 600);

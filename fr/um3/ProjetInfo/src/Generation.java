@@ -1,16 +1,17 @@
 package fr.um3.ProjetInfo.src;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Generation {
 
 
     public static final int distanceDetection = 100;
-    public static final int distanceDetectionGB = 100;
+    public static final int distanceDetectionGB = 800;
     public final int deplacement = 10;
 
-    static java.util.ArrayList<Bacterie> listBact = new java.util.ArrayList<>();
-    static java.util.ArrayList<GlobuleBlanc> listGlobblanc = new java.util.ArrayList<>();
+    private static java.util.ArrayList<Bacterie> listBact = new java.util.ArrayList<>();
+    private static java.util.ArrayList<GlobuleBlanc> listGlobblanc = new java.util.ArrayList<>();
     java.util.ArrayList<CelluleMutante> listCelMut = new java.util.ArrayList<>();
 
     public void listCellules(java.util.ArrayList<Bacterie> listBact, java.util.ArrayList<GlobuleBlanc> listGlobblanc, java.util.ArrayList<CelluleMutante> listCelMut) {
@@ -130,6 +131,10 @@ public class Generation {
         globuleBlanc.getPositionGlobBlanc().setY(newY);
     }
 
+    // Fonction déterminant si les coordonnées de 2 individu sont egales
+    private boolean isCoordEquals(double xGB, double xBact, double yGB, double yBact){
+        return calculateDistance(xGB,xBact,yGB,yBact) == 0;
+    }
 
     public void generation() {
 
@@ -213,10 +218,11 @@ public class Generation {
                 }
             }
 
+
             getListBact().get(i).setPositionBact(newPos);
 
             System.out.println("************************* " + i + " *************************");
-            System.out.println(getListBact().get(i).getPositionBact().getX() + " | " + getListBact().get(0).getPositionBact().getY());
+            System.out.println(getListBact().get(i).getPositionBact().getX() + " | " + getListBact().get(i).getPositionBact().getY());
             System.out.println(getListBact().get(i).getEtatBact().toString());
         }
 
@@ -241,24 +247,40 @@ public class Generation {
                       moveToBacterie(globuleBlanc, closestBacterie);
                   }
               }
-              for (int i2 = 0; i2 < getListBact().size() - 1; i2++) {
+
+              ArrayList<Bacterie> newBact = new ArrayList<>(getListBact());
+              ArrayList<GlobuleBlanc> newGB = new ArrayList<>(getListGlobblanc());
+              for (int i2 = 0; i2 < getListBact().size() ; i2++) {
                   System.err.println("OK");
-                  if (getListGlobblanc().get(i).getPositionGlobBlanc().getX() ==
-                          getListBact().get(i2).getPositionBact().getX()){
+                  if(isCoordEquals(
+                          newGB.get(i).getPositionGlobBlanc().getX(),
+                          newBact.get(i2).getPositionBact().getX(),
+                          newGB.get(i).getPositionGlobBlanc().getY(),
+                          newBact.get(i2).getPositionBact().getY())){
 
-                      if (getListGlobblanc().get(i).getPositionGlobBlanc().getY() ==
-                              getListBact().get(i2).getPositionBact().getY()){
+                      // Supprime la bactérie
+                      getListBact().remove(i2);
 
-
-                          ArrayList<Bacterie> newBact = getListBact();
-                          newBact.remove(i2);
-                          setListBact(newBact);
-
-                      }
+                      // Crée un nouveau globule blanc avec un décalage X de +20
+                      GlobuleBlanc originalGb = getListGlobblanc().get(i);
+                      GlobuleBlanc newGbunit = new GlobuleBlanc(); // Adaptez cette partie selon votre implémentation.
+                      newGbunit.setPositionGlobBlanc(new Position(originalGb.getPositionGlobBlanc().getX(), originalGb.getPositionGlobBlanc().getY()));
+                      newGB.add(newGbunit);
                   }
+
+                  setListGlobblanc(newGB);
+
               }
 
+
           }
+          getListGlobblanc().get(i).setEtatGlobBlanc(Etat.PATROUILLE);
+
+          System.out.println("size : "+getListGlobblanc().size());
+          System.out.println("GB : "+ getListGlobblanc().get(i).getPositionGlobBlanc().getX() + " | " +
+                  getListGlobblanc().get(i).getPositionGlobBlanc().getY());
+          System.out.println("GB : "+ getListGlobblanc().get(i).getEtatGlobBlanc());
+
       }
 
 

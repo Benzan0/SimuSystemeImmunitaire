@@ -2,8 +2,6 @@ package fr.um3.ProjetInfo.src;
 
 public class GlobuleBlanc {
 
-    private static final int MOVE_DISTANCE = 10;
-
     private Position positionGlobBlanc = new Position(0,0);
     private Etat etatGlobBlanc = Etat.PATROUILLE; // Etat par défaut = Patrouille
     // private static Random random = new Random();
@@ -11,6 +9,14 @@ public class GlobuleBlanc {
     public GlobuleBlanc(Position positionGlobBlanc, Etat etatGlobBlanc) {
         setPositionGlobBlanc(positionGlobBlanc);
         setEtatGlobBlanc(etatGlobBlanc);
+    }
+
+    public  GlobuleBlanc(GlobuleBlanc globuleBlanc){
+        positionGlobBlanc = globuleBlanc.positionGlobBlanc;
+        etatGlobBlanc = globuleBlanc.etatGlobBlanc;
+    }
+
+    public  GlobuleBlanc(){
     }
 
     public Position getPositionGlobBlanc() {
@@ -31,6 +37,8 @@ public class GlobuleBlanc {
         else
             System.err.println("\n\n [Etat Non Disponnible Pour Le Globule Blanc]");
     }
+
+
 
     /*
     public void deplacerAleatoirement() {
