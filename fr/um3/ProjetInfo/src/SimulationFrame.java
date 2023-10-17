@@ -7,14 +7,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class SimulationFrame extends JFrame implements KeyListener {
+    private BufferedImage bacterieImage;
+    private BufferedImage gbImage;
     private Generation generation;
     private DrawingPanel drawingPanel;
     private Timer timer;
     private boolean isRunning;
 
     public SimulationFrame(Generation generation) {
+
+
         this.generation = generation;
         isRunning = true; // simulation starts in the running state
 
@@ -41,6 +49,18 @@ public class SimulationFrame extends JFrame implements KeyListener {
             }
         });
         timer.start();
+
+        try {
+            bacterieImage = ImageIO.read(new File("Image/icone_bacterie.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            gbImage = ImageIO.read(new File("Image/icone_globule_blanc.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateGeneration() {
@@ -60,15 +80,27 @@ public class SimulationFrame extends JFrame implements KeyListener {
         }
 
         private void drawBacterie(Graphics g, Bacterie b) {
-            g.setColor(Color.BLUE);
+            Graphics2D g2d = (Graphics2D) g;
+
             Position pos = b.getPositionBact();
-            g.fillRect(pos.getX(), pos.getY(), 20, 20);
+
+            // Dimensions souhaitées pour l'image
+            int imageWidth = 40;
+            int imageHeight = 40;
+
+            g2d.drawImage(bacterieImage, pos.getX(), pos.getY(), imageWidth, imageHeight, null);
         }
 
         private void drawGlobuleBlanc(Graphics g, GlobuleBlanc gb) {
-            g.setColor(Color.RED);
+            Graphics2D g2d = (Graphics2D) g;
+
             Position pos = gb.getPositionGlobBlanc();
-            g.fillRect(pos.getX(), pos.getY(), 20, 20);
+
+            // Dimensions souhaitées pour l'image
+            int imageWidth = 40;
+            int imageHeight = 40;
+
+            g2d.drawImage(gbImage, pos.getX(), pos.getY(), imageWidth, imageHeight, null);
         }
     }
 
