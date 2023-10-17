@@ -42,7 +42,7 @@ public class Position {
         // Tirage d'un nombre aléatoire pour décider du déplacement en x
         int randomX = random.nextInt(3); // 0, 1 ou 2
 
-        if (getX() > 0 && getX() <= width-100) {
+        if (getX() > 0 && getX() <= width) {
             // + deplacement
             if (randomX == 1) {
                 setX(x + deplacement);
@@ -60,7 +60,7 @@ public class Position {
         int y = getY();
         // Tirage d'un nombre aléatoire pour décider du déplacement en y
         int randomY = random.nextInt(3); // 0, 1 ou 2
-        if (getY() > 0 && getY() <= height-100)
+        if (getY() > 0 && getY() <= height)
 
             // + deplacement
             if (randomY == 0) {
@@ -72,10 +72,10 @@ public class Position {
 
             }
         // si randomY == 1, pas de mouvement en y
-        else if (getY() < height-100)
-            setY(y+(2*deplacement));
+        else if (getY() > height-100)
+            setY(y-(100));
         else
-            setY(y+(2*deplacement));
+            setY(y+(100));
 
 
     }

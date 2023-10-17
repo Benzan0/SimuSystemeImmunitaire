@@ -123,7 +123,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
 
             int add = 0;
 
-            for(int i=0; i<2; i++){
+            for(int i=0; i<10; i++){
 
                 Position pos = new Position(500, 500);
                 Bacterie b = new Bacterie(pos, Etat.RECHERCHE_NOURRITURE);
