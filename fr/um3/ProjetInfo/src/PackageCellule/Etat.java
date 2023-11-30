@@ -1,4 +1,4 @@
-package fr.um3.ProjetInfo.src;
+package fr.um3.ProjetInfo.src.PackageCellule;
 
 public enum Etat {
     // etat pour GB
@@ -7,11 +7,11 @@ public enum Etat {
     // etat Recherche Nourriture pour Bacterie
     RECHERCHE_NOURRITURE,
 
+    // etat déplacement vers nutriment
+    GO_TO_NUT,
+
     // etat attaque pour GB
     CHASSE,
-
-    // etat fuite pour Bacterie
-    FUITE,
 
     // etat Errance pour CM
     ERRANCE
