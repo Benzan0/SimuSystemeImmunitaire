@@ -53,6 +53,23 @@ public class Plaie {
         Rectangle rectangle011 = new Rectangle(pos11,20,10);
         vaissaux.add(rectangle011);
 
+        Position pos12 = new Position(-20,-20);
+        Rectangle rectangle012 = new Rectangle(pos12,20,1000);
+        Rectangle rectangle013 = new Rectangle(pos12,1000,20);
+        vaissaux.add(rectangle012);
+        vaissaux.add(rectangle013);
+
+        Position pos13 = new Position(1000,0);
+        Rectangle rectangle014 = new Rectangle(pos13,20,1000);
+        vaissaux.add(rectangle014);
+
+        Position pos14 = new Position(0,1000);
+        Rectangle rectangle015 = new Rectangle(pos14,1000,20);
+        vaissaux.add(rectangle015);
+
+
+
+
 
 
         return vaissaux;

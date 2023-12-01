@@ -19,7 +19,7 @@ public class InitialWindow extends JFrame {
     public InitialWindow() {
         setTitle("Ecran de départ");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 400);
+        setSize(500, 500);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         String[] listePara = {"Chance Division","Chance Mutation","Taux d'apparition Nutriment","Duree de vie Bactérie"};
@@ -90,7 +90,11 @@ public class InitialWindow extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                launchSimulation();
+                Generation generation = new Generation();
+                SimulationFrame simulationFrame = new SimulationFrame(generation);
+                simulationFrame.setVisible(true);
+
+                add(SimulationFrame.drawingPanel);
             }
         });
 
@@ -116,7 +120,7 @@ public class InitialWindow extends JFrame {
                 try {
                     double value = Double.parseDouble(textFieldCM.getText());
                     System.out.println("Chance Mutation value: " + value);
-                    Generation.setChanceDivision(value);
+                    Generation.setChanceMutation(value);
                     System.out.println(Generation.chanceMutation);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Veuillez entrer un nombre valide.");
@@ -162,21 +166,13 @@ public class InitialWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    List<Double> listPara = FilesReader.readFiles("Profiles/ProfileBasique.txt");
+                    setConf("Profiles/ProfileBasique.txt");
 
-                    Generation.setChanceDivision(listPara.get(0));
-                    System.out.println(Generation.chanceDivision);
-                    Generation.setChanceMutation(listPara.get(1));
-                    System.out.println(Generation.chanceMutation);
-                    Nutriment.setChanceSpawn(listPara.get(2));
-                    System.out.println(Nutriment.chanceSpawn);
-                    Generation.setDureeDeVieBact(listPara.get(3).intValue());
-                    System.out.println(Generation.dureeDeVieBact);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Veuillez entrer un nombre valide.");
                 } catch (ChanceException ce){
                     JOptionPane.showMessageDialog(null, ce.getMessage());
-                } catch (IOException ex) {
+                } catch (IOException | FilesException ex) {
                     throw new RuntimeException(ex);
                 }
             }
@@ -186,7 +182,7 @@ public class InitialWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    String text = JOptionPane.showInputDialog("Entez le chemin vers le fichier .txt contenant la configuration \n" +
+                    String text = JOptionPane.showInputDialog("Entrez le chemin vers le fichier .txt contenant la configuration \n" +
                             "le fichier doit contenir dans l'ordre : chance division, chance mutation, chance apparition nutriment " +
                             ", durée de vie bactérie");
 
@@ -265,13 +261,7 @@ public class InitialWindow extends JFrame {
         else throw new FilesException("Erreur : Le fichier n'as pas été correctement configuré");
     }
 
-    private void launchSimulation() {
-        Generation generation = new Generation();
-        SimulationFrame simulationFrame = new SimulationFrame(generation);
-        simulationFrame.setVisible(true);
 
-        dispose();
-    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

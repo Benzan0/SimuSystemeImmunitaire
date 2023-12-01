@@ -31,8 +31,8 @@ public class SimulationFrame extends JFrame implements KeyListener {
 
 
     private BufferedImage nutriImage;
-    private Generation generation;
-    private DrawingPanel drawingPanel;
+    public Generation generation;
+    public static DrawingPanel drawingPanel;
     private Timer timer;
     private boolean isRunning;
     public static ArrayList<Rectangle> vaisseauSimu = Plaie.creationVaissaux();
@@ -55,7 +55,7 @@ public class SimulationFrame extends JFrame implements KeyListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 
-        this.drawingPanel = new DrawingPanel();
+        drawingPanel = new DrawingPanel();
         this.add(drawingPanel, BorderLayout.CENTER);
 
         drawingPanel.add(gbCountText);
@@ -132,7 +132,11 @@ public class SimulationFrame extends JFrame implements KeyListener {
     }
 
     private class DrawingPanel extends JPanel {
-        @Override
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		@Override
         protected void paintComponent(Graphics g) {
 
             super.paintComponent(g);
@@ -190,7 +194,6 @@ public class SimulationFrame extends JFrame implements KeyListener {
 
         private void drawCelluleMutante(Graphics g, CelluleMutante cm) {
             Graphics2D g2d = (Graphics2D) g;
-
             Position pos = cm.getPosition();
 
             // Dimensions souhaitées pour l'image
@@ -259,6 +262,8 @@ public class SimulationFrame extends JFrame implements KeyListener {
     }
     @Override
     public void keyReleased(KeyEvent e) {}
+
+
 
     public static void main(String[] args) {
 
